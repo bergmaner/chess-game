@@ -32,7 +32,11 @@ body {
 }
 
 .black{
-    background-color: #222;
+    background-color: #444;
+}
+
+.piece img{
+    max-width: 100%;
 }
 
 .coordinate{
@@ -51,7 +55,7 @@ body {
     color: #eee;
 }
 .blackText{
-   color: #222;
+   color: #444;
 }
 
 .rank{
