@@ -34,3 +34,40 @@ body {
 .black{
     background-color: #222;
 }
+
+.coordinate{
+
+    height: auto;
+    display: flex;
+    bottom: 4%;
+    left: 4%;
+    position: absolute;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Verdanam Geneva, Tahoma, sans-serif;
+}
+
+.whiteText{
+    color: #eee;
+}
+.blackText{
+   color: #222;
+}
+
+.rank{
+    top:4%;
+    right: 4%;
+    left: auto;
+}
+@media (min-width: 1000px){
+    #board{
+        width: 600px;
+        height: 600px;
+    }
+}
+
+@media (max-width: 600px){
+    .coordinate{
+        font-size: 8px;
+    }
+}
