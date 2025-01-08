@@ -86,6 +86,14 @@ function getPossibleMoves(startingSquareId, piece){
     else if(piece.classList.contains('bishop')){
         getBishopMoves(startingSquareId, pieceColor)
     }
+
+    else if(piece.classList.contains('queen')){
+        getQueenMoves(startingSquareId, pieceColor)
+    }
+    else if(piece.classList.contains('king')){
+        getQueenMoves(startingSquareId, pieceColor)
+    }
+
 }
 
 function getPawnMoves(startingSquareId, pieceColor){
@@ -133,6 +141,43 @@ function getBishopMoves(startingSquareId, pieceColor){
     moveToEightRankAFile(startingSquareId,pieceColor);
     moveToFirstRankHFile(startingSquareId,pieceColor);
     moveToFirstRankAFile(startingSquareId,pieceColor);
+}
+
+function getQueenMoves(startingSquareId, pieceColor){
+    moveToEightRank(startingSquareId,pieceColor);
+    moveToFirstRank(startingSquareId,pieceColor);
+    moveToAFile(startingSquareId,pieceColor);
+    moveToHFile(startingSquareId,pieceColor);
+    moveToEightRankHFile(startingSquareId,pieceColor);
+    moveToEightRankAFile(startingSquareId,pieceColor);
+    moveToFirstRankHFile(startingSquareId,pieceColor);
+    moveToFirstRankAFile(startingSquareId,pieceColor);
+}
+
+
+function getKingMoves(startingSquareId, pieceColor){
+    const file = startingSquareId.charCodeAt(0) -97;
+    const rank = startingSquareId.charAt(1);
+    const rankNumber = parseInt(rank);
+
+    let currentFile = file;
+    let currentRank = rankNumber;
+
+    const moves = [
+        [0,1], [0,-1], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1],[1,0]    ];
+
+    moves.forEach((move) =>{
+        currentFile = file+ move[0];
+        currentRank = rankNumber + move[1];
+
+        if(currentFile >= 0 && currentFile <= 7 && currentRank >0 && currentRank <= 8){
+            let currentSquareId = String.fromCharCode(currentFile + 97) + currentRank;
+            let currentSquare = document.getElementById(currentSquareId);
+            let squareContent = isSquareOccupied(currentSquare);
+            if(squareContent !== 'blank' && squareContent === pieceColor) return;
+            legalSquares.push(String.fromCharCode(currentFile + 97) + currentRank)
+        }
+    })
 }
 
 
