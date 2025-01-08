@@ -83,6 +83,9 @@ function getPossibleMoves(startingSquareId, piece){
     else if(piece.classList.contains('rook')){
         getRookMoves(startingSquareId, pieceColor)
     }
+    else if(piece.classList.contains('bishop')){
+        getBishopMoves(startingSquareId, pieceColor)
+    }
 }
 
 function getPawnMoves(startingSquareId, pieceColor){
@@ -124,6 +127,107 @@ function getRookMoves(startingSquareId, pieceColor){
     moveToAFile(startingSquareId,pieceColor);
     moveToHFile(startingSquareId,pieceColor);
 }
+
+function getBishopMoves(startingSquareId, pieceColor){
+    moveToEightRankHFile(startingSquareId,pieceColor);
+    moveToEightRankAFile(startingSquareId,pieceColor);
+    moveToFirstRankHFile(startingSquareId,pieceColor);
+    moveToFirstRankAFile(startingSquareId,pieceColor);
+}
+
+
+function moveToEightRankAFile(startingSquareId, pieceColor){
+    const file = startingSquareId.charAt(0);
+    const rank = startingSquareId.charAt(1);
+    const rankNumber = parseInt(rank);
+    let currentFile = file;
+    let currentRank = rankNumber;
+
+    while(!(currentFile === 'a' || currentRank === 8)){
+        currentFile = String.fromCharCode(currentFile.charCodeAt(currentFile.length -1) -1);
+        currentRank++;
+        let currentSquareId = currentFile + currentRank;
+        let currentSquare = document.getElementById(currentSquareId);
+        let squareContent = isSquareOccupied(currentSquare);
+        if(squareContent !== 'blank' && squareContent === pieceColor) return;
+        legalSquares.push(currentSquareId)
+        if(squareContent !== 'blank' && squareContent !== pieceColor) return;
+        legalSquares.push(currentSquareId)
+
+
+
+    }
+}
+function moveToEightRankHFile(startingSquareId, pieceColor){
+    const file = startingSquareId.charAt(0);
+    const rank = startingSquareId.charAt(1);
+    const rankNumber = parseInt(rank);
+    let currentFile = file;
+    let currentRank = rankNumber;
+
+    while(!(currentFile === 'h' || currentRank === 8)){
+        currentFile = String.fromCharCode(currentFile.charCodeAt(currentFile.length -1) +1);
+        currentRank++;
+        let currentSquareId = currentFile + currentRank;
+        let currentSquare = document.getElementById(currentSquareId);
+        let squareContent = isSquareOccupied(currentSquare);
+        if(squareContent !== 'blank' && squareContent === pieceColor) return;
+        legalSquares.push(currentSquareId)
+        if(squareContent !== 'blank' && squareContent !== pieceColor) return;
+        legalSquares.push(currentSquareId)
+
+
+
+    }
+}
+
+function moveToFirstRankAFile(startingSquareId, pieceColor){
+    const file = startingSquareId.charAt(0);
+    const rank = startingSquareId.charAt(1);
+    const rankNumber = parseInt(rank);
+    let currentFile = file;
+    let currentRank = rankNumber;
+
+    while(!(currentFile === 'a' || currentRank === 1)){
+        currentFile = String.fromCharCode(currentFile.charCodeAt(currentFile.length -1) -1);
+        currentRank--;
+        let currentSquareId = currentFile + currentRank;
+        let currentSquare = document.getElementById(currentSquareId);
+        let squareContent = isSquareOccupied(currentSquare);
+        if(squareContent !== 'blank' && squareContent === pieceColor) return;
+        legalSquares.push(currentSquareId)
+        if(squareContent !== 'blank' && squareContent !== pieceColor) return;
+        legalSquares.push(currentSquareId)
+
+
+
+    }
+}
+
+function moveToFirstRankHFile(startingSquareId, pieceColor){
+    const file = startingSquareId.charAt(0);
+    const rank = startingSquareId.charAt(1);
+    const rankNumber = parseInt(rank);
+    let currentFile = file;
+    let currentRank = rankNumber;
+
+    while(!(currentFile === 'h' || currentRank === 1)){
+        currentFile = String.fromCharCode(currentFile.charCodeAt(currentFile.length -1) +1);
+        currentRank--;
+        let currentSquareId = currentFile + currentRank;
+        let currentSquare = document.getElementById(currentSquareId);
+        let squareContent = isSquareOccupied(currentSquare);
+        if(squareContent !== 'blank' && squareContent === pieceColor) return;
+        legalSquares.push(currentSquareId)
+        if(squareContent !== 'blank' && squareContent !== pieceColor) return;
+        legalSquares.push(currentSquareId)
+
+
+
+    }
+}
+
+
 
 function moveToEightRank(startingSquareId, pieceColor){
     const file = startingSquareId.charAt(0);
