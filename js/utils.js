@@ -1,4 +1,3 @@
-import {gameState} from "./gameSetup.js";
 
 export const getMovesInDirections = (startingSquareId, pieceColor, boardSquaresArray, directions) => {
     const file = startingSquareId.charAt(0);
@@ -63,10 +62,13 @@ export const getMovesFromOffsets = (startingSquareId, pieceColor, boardSquaresAr
 
 
 export const getPieceAtSquare = (squareId, boardSquaresArray) => {
-    console.log('ddd', boardSquaresArray, gameState.boardSquaresArray)
     if (!Array.isArray(boardSquaresArray)) {
         return null;
     }
     const square = boardSquaresArray?.find((x) => x.squareId === squareId);
     return square || null;
+};
+
+export const deepCopyArray = (array) => {
+    return JSON.parse(JSON.stringify(array));
 };

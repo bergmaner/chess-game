@@ -1,4 +1,4 @@
-import { getMovesInDirections, getMovesFromOffsets } from './shared.js';
+import { getMovesInDirections, getMovesFromOffsets } from './utils.js';
 
 export const getPawnMoves = (startingSquareId, pieceColor, boardSquaresArray) => {
     return [

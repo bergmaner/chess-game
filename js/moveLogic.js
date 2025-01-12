@@ -1,4 +1,5 @@
 import { getPawnMoves,getKnightMoves, getRookMoves, getBishopMoves, getQueenMoves, getKingMoves } from './pieceMoves.js';
+import {deepCopyArray} from "./utils.js";
 
 export const moveGenerators = {
     pawn: getPawnMoves,
@@ -15,8 +16,11 @@ export const getPossibleMoves = (startingSquareId, piece, boardSquaresArray) => 
 }
 
 export const updateBoardSquaresArray = (currentSquareId, destinationSquareId, boardSquaresArray) => {
-    const currentSquare = boardSquaresArray.find((x) => x.squareId === currentSquareId);
-    const destinationElement = boardSquaresArray.find((x) => x.squareId === destinationSquareId);
+
+    const newBoardSquaresArray = deepCopyArray(boardSquaresArray);
+
+    const currentSquare = newBoardSquaresArray.find((x) => x.squareId === currentSquareId);
+    const destinationElement = newBoardSquaresArray.find((x) => x.squareId === destinationSquareId);
 
     destinationElement.pieceColor = currentSquare.pieceColor;
     destinationElement.pieceType = currentSquare.pieceType;
@@ -25,4 +29,7 @@ export const updateBoardSquaresArray = (currentSquareId, destinationSquareId, bo
     currentSquare.pieceColor = 'blank';
     currentSquare.pieceType = 'blank';
     currentSquare.pieceId = 'blank';
+
+    return newBoardSquaresArray;
+
 }

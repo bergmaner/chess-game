@@ -1,7 +1,7 @@
 import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
-import {getPieceAtSquare} from "./shared.js";
-import {isKingInCheck} from "./gameLogic.js";
+import {getPieceAtSquare} from "./utils.js";
+import {checkMoveValidAgainstCheck, isKingInCheck} from "./gameLogic.js";
 
 export const allowDrop = (ev) => {
     ev.preventDefault();
@@ -42,18 +42,24 @@ export const drop = (ev) => {
     const pieceType = piece.classList[1];
     const destinationSquare = ev.currentTarget;
     let destinationSquareId = destinationSquare.id;
+    legalSquares = checkMoveValidAgainstCheck(legalSquares, startingSquareId,pieceColor,pieceType);
+
+    console.log('legalSquares', legalSquares)
 
     if(pieceType === 'king'){
         let isCheck = isKingInCheck(destinationSquareId, pieceColor, gameState.boardSquaresArray);
 
         if(isCheck) return;
+
+        gameState.isWhiteTurn ? (gameState.whiteKingSquare = destinationSquareId) : (gameState.blackKingSquare = destinationSquareId);
+
     }
 
     let squareContent = getPieceAtSquare(destinationSquareId, gameState.boardSquaresArray);
     if((squareContent.pieceColor === 'blank') && (legalSquares.includes(destinationSquareId))){
         destinationSquare.appendChild(piece)
         toggleTurn()
-        updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+        gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
         return;
     }
     if(squareContent.pieceColor !== 'blank' && (legalSquares.includes(destinationSquareId)) ){
@@ -63,7 +69,7 @@ export const drop = (ev) => {
 
         destinationSquare.appendChild(piece);
         toggleTurn()
-        updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+        gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
         return;
 
     }
