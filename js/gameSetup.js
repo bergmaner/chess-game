@@ -57,7 +57,11 @@ export const fillBoardSquaresArray = (boardSquares) => {
             color = piece.getAttribute("color");
             pieceType = piece.classList[1];
             pieceId = piece.id;
+            console.log('ddd', piece.id)
         }
+
+
+
 
         const arrayElement = {
             squareId: square.id,
@@ -66,6 +70,7 @@ export const fillBoardSquaresArray = (boardSquares) => {
             pieceId: pieceId
         };
         gameState.boardSquaresArray.push(arrayElement);
-    }
 
+    }
+    console.log('ddd', gameState.boardSquaresArray)
 }

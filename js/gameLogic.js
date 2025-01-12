@@ -4,9 +4,9 @@ import {
     getKnightMoves,
     getRookMoves
 } from "./pieceMoves.js";
-import {deepCopyArray, getPieceAtSquare} from "./utils.js";
+import {deepCopyArray, getPieceAtSquare, showAlert} from "./utils.js";
 import { gameState} from "./gameSetup.js";
-import {updateBoardSquaresArray} from "./moveLogic.js";
+import {getAllPossibleMoves, updateBoardSquaresArray} from "./moveLogic.js";
 
 export const isKingInCheck = (squareId, pieceColor, boardSquaresArray) => {
 
@@ -79,3 +79,19 @@ const isMoveValidAgainstCheck = (startingSquareId, destinationId, pieceColor, pi
 
     return !isKingInCheck(kingSquare, pieceColor, updatedBoard);
 };
+
+export const checkForCheckmate = () => {
+
+    let kingSquare = gameState.isWhiteTurn ? gameState.whiteKingSquare : gameState.blackKingSquare;
+    let pieceColor = gameState.isWhiteTurn ? 'white' : 'black';
+    let boardSquaresArrayCopy = deepCopyArray(gameState.boardSquaresArray)
+    let kingIsCheck = isKingInCheck(kingSquare, pieceColor, boardSquaresArrayCopy);
+    if(!kingIsCheck) return;
+    let possibleMoves = getAllPossibleMoves(boardSquaresArrayCopy, pieceColor);
+    if(possibleMoves.length > 0) return;
+
+    let message = '';
+    gameState.isWhiteTurn ? (message = 'Black Wins') : (message = 'White Wins' );
+    showAlert(message);
+
+}

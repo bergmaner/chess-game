@@ -3,6 +3,7 @@ import {setupBoardSquares, fillBoardSquaresArray, setupPieces} from './gameSetup
 const boardSquares = document.getElementsByClassName('square');
 
 setupBoardSquares(boardSquares);
-fillBoardSquaresArray(boardSquares);
 setupPieces();
+fillBoardSquaresArray(boardSquares);
+
 

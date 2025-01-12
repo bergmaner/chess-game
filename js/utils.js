@@ -72,3 +72,15 @@ export const getPieceAtSquare = (squareId, boardSquaresArray) => {
 export const deepCopyArray = (array) => {
     return JSON.parse(JSON.stringify(array));
 };
+
+export const showAlert = ( message ) => {
+
+    const alert = document.getElementById('alert');
+    alert.innerHTML = message;
+    alert.style.display = 'block';
+
+    setTimeout(() => {
+        alert.style.display = 'none';
+    }, 3000);
+
+}

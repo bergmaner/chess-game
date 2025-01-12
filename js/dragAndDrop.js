@@ -1,7 +1,7 @@
 import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
 import {getPieceAtSquare} from "./utils.js";
-import {checkMoveValidAgainstCheck, isKingInCheck} from "./gameLogic.js";
+import {checkForCheckmate, checkMoveValidAgainstCheck, isKingInCheck} from "./gameLogic.js";
 
 export const allowDrop = (ev) => {
     ev.preventDefault();
@@ -54,14 +54,16 @@ export const drop = (ev) => {
         gameState.isWhiteTurn ? (gameState.whiteKingSquare = destinationSquareId) : (gameState.blackKingSquare = destinationSquareId);
 
     }
-
     let squareContent = getPieceAtSquare(destinationSquareId, gameState.boardSquaresArray);
     if((squareContent.pieceColor === 'blank') && (legalSquares.includes(destinationSquareId))){
         destinationSquare.appendChild(piece)
         toggleTurn()
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+        checkForCheckmate();
         return;
     }
+
+
     if(squareContent.pieceColor !== 'blank' && (legalSquares.includes(destinationSquareId)) ){
         while(destinationSquare.firstChild){
             destinationSquare.removeChild(destinationSquare.firstChild);
@@ -70,7 +72,11 @@ export const drop = (ev) => {
         destinationSquare.appendChild(piece);
         toggleTurn()
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+        checkForCheckmate();
         return;
 
     }
+
+
+
 }

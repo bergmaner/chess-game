@@ -1,5 +1,7 @@
 import { getPawnMoves,getKnightMoves, getRookMoves, getBishopMoves, getQueenMoves, getKingMoves } from './pieceMoves.js';
-import {deepCopyArray} from "./utils.js";
+import {deepCopyArray, getPieceAtSquare} from "./utils.js";
+import {checkMoveValidAgainstCheck} from "./gameLogic.js";
+import {gameState} from "./gameSetup.js";
 
 export const moveGenerators = {
     pawn: getPawnMoves,
@@ -30,6 +32,30 @@ export const updateBoardSquaresArray = (currentSquareId, destinationSquareId, bo
     currentSquare.pieceType = 'blank';
     currentSquare.pieceId = 'blank';
 
+    console.log('lll',gameState.boardSquaresArray)
+
     return newBoardSquaresArray;
 
+
+
 }
+
+export const getAllPossibleMoves = (squaresArray, color) => {
+
+    return squaresArray
+        .filter((square) => square.pieceColor === color)
+        .flatMap((square) => {
+            const { pieceColor, pieceType, pieceId } = getPieceAtSquare(square.squareId, squaresArray);
+
+            if (pieceId === 'blank') return [];
+
+            const squaresArrayCopy = deepCopyArray(squaresArray);
+            const pieceObject = { pieceColor, pieceType, pieceId };
+
+            let legalSquares = getPossibleMoves(square.squareId, pieceObject, squaresArrayCopy);
+
+            legalSquares = checkMoveValidAgainstCheck(legalSquares, square.squareId, pieceColor, pieceType);
+
+            return legalSquares;
+        });
+};
