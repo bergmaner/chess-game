@@ -27,7 +27,7 @@ export const checkPawnDiagonalCaptures = (startingSquareId, pieceColor, boardSqu
             currentSquareId = currentFile + currentRank;
             let currentSquare = boardSquaresArray.find((x) => x.squareId === currentSquareId)
 
-            console.log('ddd', boardSquaresArray)
+
 
             const squareContent = currentSquare.pieceColor;
             if(squareContent !== 'blank' && squareContent !== pieceColor)

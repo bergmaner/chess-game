@@ -1,3 +1,5 @@
+import {gameState} from "./gameSetup.js";
+
 export const getMovesInDirections = (startingSquareId, pieceColor, boardSquaresArray, directions) => {
     const file = startingSquareId.charAt(0);
     const rank = parseInt(startingSquareId.charAt(1));
@@ -57,7 +59,14 @@ export const getMovesFromOffsets = (startingSquareId, pieceColor, boardSquaresAr
     return legalSquares;
 };
 
+
+
+
 export const getPieceAtSquare = (squareId, boardSquaresArray) => {
-    const square = boardSquaresArray.find((x) => x.squareId === squareId);
+    console.log('ddd', boardSquaresArray, gameState.boardSquaresArray)
+    if (!Array.isArray(boardSquaresArray)) {
+        return null;
+    }
+    const square = boardSquaresArray?.find((x) => x.squareId === squareId);
     return square || null;
 };

@@ -2,9 +2,9 @@ import {allowDrop, drag, drop} from './dragAndDrop.js';
 
 const pieces = document.getElementsByClassName('piece');
 const piecesImages = document.getElementsByClassName('pieceImg');
-export let boardSquaresArray = [];
 export const gameState = {
-    isWhiteTurn: true
+    isWhiteTurn: true,
+    boardSquaresArray: []
 };
 
 export const setupPieces = () => {
@@ -21,7 +21,6 @@ export const setupPieces = () => {
 
 export const toggleTurn = () => {
     gameState.isWhiteTurn = !gameState.isWhiteTurn;
-    console.log("Turn toggled. Current turn:", gameState.isWhiteTurn ? "White" : "Black");
 }
 
 export const setupBoardSquares = (boardSquares) => {
@@ -38,6 +37,9 @@ export const setupBoardSquares = (boardSquares) => {
 
 
 export const fillBoardSquaresArray = (boardSquares) => {
+
+
+
     for (let i = 0; i < boardSquares.length; i++) {
         let row = 8 - Math.floor(i / 8);
         let column = String.fromCharCode(97 + (i % 8));
@@ -61,6 +63,7 @@ export const fillBoardSquaresArray = (boardSquares) => {
             pieceType: pieceType,
             pieceId: pieceId
         };
-        boardSquaresArray.push(arrayElement);
+        gameState.boardSquaresArray.push(arrayElement);
     }
+
 }

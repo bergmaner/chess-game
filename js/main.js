@@ -5,3 +5,4 @@ const boardSquares = document.getElementsByClassName('square');
 setupBoardSquares(boardSquares);
 fillBoardSquaresArray(boardSquares);
 setupPieces();
+

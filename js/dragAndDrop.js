@@ -1,8 +1,9 @@
-import {gameState, toggleTurn, boardSquaresArray} from './gameSetup.js';
+import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
 import {getPieceAtSquare} from "./shared.js";
+import {isKingInCheck} from "./gameLogic.js";
 
-export function allowDrop(ev) {
+export const allowDrop = (ev) => {
     ev.preventDefault();
 }
 
@@ -13,14 +14,14 @@ export const drag = (ev) => {
     const pieceId = piece.id;
     const {isWhiteTurn} = gameState;
 
-    console.log('ddd',ev, piece, pieceColor, isWhiteTurn )
+
 
     if ((isWhiteTurn && pieceColor === "white") || (!isWhiteTurn && pieceColor === 'black')) {
         const startingSquareId = piece.parentNode.id;
         ev.dataTransfer.setData("text", piece.id + ' ' + startingSquareId);
         const pieceObject = { pieceColor: pieceColor, pieceType:pieceType,pieceId:pieceId }
 
-        let legalSquares = getPossibleMoves(startingSquareId, pieceObject, boardSquaresArray);
+        let legalSquares = getPossibleMoves(startingSquareId, pieceObject, gameState.boardSquaresArray);
         let legalSquaresJson = JSON.stringify(legalSquares);
         ev.dataTransfer.setData("application/json", legalSquaresJson);
     }
@@ -41,11 +42,18 @@ export const drop = (ev) => {
     const pieceType = piece.classList[1];
     const destinationSquare = ev.currentTarget;
     let destinationSquareId = destinationSquare.id;
-    let squareContent = getPieceAtSquare(destinationSquareId, boardSquaresArray);
+
+    if(pieceType === 'king'){
+        let isCheck = isKingInCheck(destinationSquareId, pieceColor, gameState.boardSquaresArray);
+
+        if(isCheck) return;
+    }
+
+    let squareContent = getPieceAtSquare(destinationSquareId, gameState.boardSquaresArray);
     if((squareContent.pieceColor === 'blank') && (legalSquares.includes(destinationSquareId))){
         destinationSquare.appendChild(piece)
         toggleTurn()
-        updateBoardSquaresArray(startingSquareId, destinationSquareId, boardSquaresArray);
+        updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
         return;
     }
     if(squareContent.pieceColor !== 'blank' && (legalSquares.includes(destinationSquareId)) ){
@@ -55,7 +63,7 @@ export const drop = (ev) => {
 
         destinationSquare.appendChild(piece);
         toggleTurn()
-        updateBoardSquaresArray(startingSquareId, destinationSquareId, boardSquaresArray);
+        updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
         return;
 
     }
