@@ -1,4 +1,5 @@
 import { getMovesInDirections, getMovesFromOffsets } from './utils.js';
+import {getCastlingMovesForKing} from "./castleLogic.js";
 
 export const getPawnMoves = (startingSquareId, pieceColor, boardSquaresArray) => {
     return [
@@ -75,8 +76,14 @@ export const checkPawnForwardMoves = (
 
 export const getKingMoves = (startingSquareId, pieceColor, boardSquaresArray) => {
     const kingOffsets = [[0, 1], [0, -1], [1, 1], [1, -1], [-1, 0], [-1, -1], [-1, 1], [1, 0]];
-    return getMovesFromOffsets(startingSquareId, pieceColor, boardSquaresArray, kingOffsets);
-}
+
+    const legalMoves = [
+        ...getMovesFromOffsets(startingSquareId, pieceColor, boardSquaresArray, kingOffsets),
+        ...getCastlingMovesForKing(pieceColor, boardSquaresArray)
+    ];
+
+    return legalMoves;
+};
 
 export const getKnightMoves = (startingSquareId, pieceColor, boardSquaresArray) => {
     const knightOffsets = [[-2, 1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]];

@@ -5,8 +5,8 @@ const piecesImages = document.getElementsByClassName('pieceImg');
 export const gameState = {
     isWhiteTurn: true,
     boardSquaresArray: [],
-    whiteKingSquare: 'e1',
-    blackKingSquare: 'e8'
+    moves: [],
+    castlingSquares: [ 'g1', 'g8', 'c1', 'c8' ],
 };
 
 export const setupPieces = () => {

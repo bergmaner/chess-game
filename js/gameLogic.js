@@ -7,6 +7,7 @@ import {
 import {deepCopyArray, getPieceAtSquare, showAlert} from "./utils.js";
 import { gameState} from "./gameSetup.js";
 import {getAllPossibleMoves, updateBoardSquaresArray} from "./moveLogic.js";
+import {getKingLastMove} from "./gameHistory.js";
 
 export const isKingInCheck = (squareId, pieceColor, boardSquaresArray) => {
 
@@ -53,9 +54,9 @@ export const isKingInCheck = (squareId, pieceColor, boardSquaresArray) => {
 
 export const checkMoveValidAgainstCheck = (legalSquares, startingSquareId, pieceColor, pieceType) => {
 
-    const kingSquare = pieceType === 'king'
-        ? startingSquareId
-        : (pieceColor === 'white' ? gameState.whiteKingSquare : gameState.blackKingSquare);
+    const kingSquare = gameState.isWhiteTurn
+        ? getKingLastMove('white')
+        : getKingLastMove('black');
 
 
     return legalSquares.filter((destinationId) => isMoveValidAgainstCheck(
@@ -82,7 +83,7 @@ const isMoveValidAgainstCheck = (startingSquareId, destinationId, pieceColor, pi
 
 export const checkForCheckmate = () => {
 
-    let kingSquare = gameState.isWhiteTurn ? gameState.whiteKingSquare : gameState.blackKingSquare;
+    let kingSquare = gameState.isWhiteTurn ? getKingLastMove('white') : getKingLastMove('black');
     let pieceColor = gameState.isWhiteTurn ? 'white' : 'black';
     let boardSquaresArrayCopy = deepCopyArray(gameState.boardSquaresArray)
     let kingIsCheck = isKingInCheck(kingSquare, pieceColor, boardSquaresArrayCopy);

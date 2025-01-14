@@ -2,6 +2,8 @@ import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
 import {getPieceAtSquare} from "./utils.js";
 import {checkForCheckmate, checkMoveValidAgainstCheck, isKingInCheck} from "./gameLogic.js";
+import {makeMove} from "./gameHistory.js";
+import {kingHasMoved, performCastling} from "./castleLogic.js";
 
 export const allowDrop = (ev) => {
     ev.preventDefault();
@@ -51,14 +53,23 @@ export const drop = (ev) => {
 
         if(isCheck) return;
 
-        gameState.isWhiteTurn ? (gameState.whiteKingSquare = destinationSquareId) : (gameState.blackKingSquare = destinationSquareId);
-
     }
     let squareContent = getPieceAtSquare(destinationSquareId, gameState.boardSquaresArray);
     if((squareContent.pieceColor === 'blank') && (legalSquares.includes(destinationSquareId))){
+
+        let isCheck = false;
+
+        if(pieceType === 'king') isCheck = isKingInCheck(startingSquareId, pieceColor, gameState.boardSquaresArray);
+        if(pieceType === 'king' && !kingHasMoved(pieceColor) && gameState.castlingSquares.includes(destinationSquareId) && !isCheck){
+            performCastling(piece, pieceColor, startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+            return;
+        }
+        if(pieceType === 'king' && !kingHasMoved(pieceColor) && gameState.castlingSquares.includes(destinationSquareId) && isCheck) return;
         destinationSquare.appendChild(piece)
         toggleTurn()
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+        let captured = false;
+        makeMove( startingSquareId, destinationSquareId, pieceType, pieceColor, captured );
         checkForCheckmate();
         return;
     }
@@ -72,6 +83,8 @@ export const drop = (ev) => {
         destinationSquare.appendChild(piece);
         toggleTurn()
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+        let captured = true;
+        makeMove( startingSquareId, destinationSquareId, pieceType, pieceColor, captured );
         checkForCheckmate();
         return;
 

@@ -73,6 +73,24 @@ body {
     right: 4%;
     left: auto;
 }
+
+.highlight {
+    position: relative;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 @media (min-width: 1000px){
     #board{
         width: 600px;
