@@ -1,5 +1,9 @@
 import { getMovesInDirections, getMovesFromOffsets } from './utils.js';
 import {getCastlingMovesForKing} from "./castleLogic.js";
+import {isEnpassantPosible, updateBoardSquaresArray} from "./moveLogic.js";
+import {gameState, toggleTurn} from "./gameSetup.js";
+import {makeMove} from "./gameHistory.js";
+import {checkForCheckmate} from "./gameLogic.js";
 
 export const getPawnMoves = (startingSquareId, pieceColor, boardSquaresArray) => {
     return [
@@ -33,6 +37,22 @@ export const checkPawnDiagonalCaptures = (startingSquareId, pieceColor, boardSqu
             const squareContent = currentSquare.pieceColor;
             if(squareContent !== 'blank' && squareContent !== pieceColor)
                 legalSquares.push(currentSquareId)
+
+            if(squareContent === 'blank'){
+                currentSquareId = currentFile + rank;
+                let pawnStartingSquareRank = rankNumber + direction * 2;
+                let pawnStartingSuareId = currentFile + pawnStartingSquareRank;
+
+                if(isEnpassantPosible(currentSquareId, pawnStartingSuareId, direction)){
+
+                    let pawnStartingSquareRank = rankNumber + direction;
+                    let enPassantSquare = currentFile + pawnStartingSquareRank;
+                    legalSquares.push(enPassantSquare);
+
+                }
+
+            }
+
         }
     }
     return legalSquares
@@ -105,4 +125,31 @@ export const getQueenMoves = (startingSquareId, pieceColor, boardSquaresArray) =
         ...getBishopMoves(startingSquareId, pieceColor, boardSquaresArray),
         ...getRookMoves(startingSquareId, pieceColor, boardSquaresArray)
     ];
+}
+
+export const performEnPassant = ( piece, pieceColor, startingSquareId, destinationSquareId ) => {
+
+    let file = destinationSquareId[0];
+    let rank = parseInt(destinationSquareId[1]);
+    rank += (pieceColor === 'white') ? -1 : 1;
+    let squareBehindId = file + rank;
+    const squareBehindElement = document.getElementById(squareBehindId);
+    while(squareBehindElement.firstChild){
+        squareBehindElement.removeChild(squareBehindElement.firstChild);
+    }
+
+    let squareBehind = gameState.boardSquaresArray.find((x) => x.squareId === squareBehindId );
+    squareBehind.pieceColor = 'blank';
+    squareBehind.pieceType = 'blank';
+    squareBehind.pieceId = 'blank';
+
+    const destinationSquare = document.getElementById(destinationSquareId);
+    destinationSquare.appendChild(piece);
+    toggleTurn();
+    gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
+    let captured = true;
+    makeMove(startingSquareId,destinationSquareId,'pawn',pieceColor,captured);
+    checkForCheckmate();
+    return;
+
 }

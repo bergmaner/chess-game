@@ -1,9 +1,10 @@
 import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
-import {getPieceAtSquare} from "./utils.js";
+import {getPieceAtSquare, highlightPossibleMoves, removeHighlightFromMoves} from "./utils.js";
 import {checkForCheckmate, checkMoveValidAgainstCheck, isKingInCheck} from "./gameLogic.js";
 import {makeMove} from "./gameHistory.js";
 import {kingHasMoved, performCastling} from "./castleLogic.js";
+import {performEnPassant} from "./pieceMoves.js";
 
 export const allowDrop = (ev) => {
     ev.preventDefault();
@@ -25,11 +26,18 @@ export const drag = (ev) => {
 
         let legalSquares = getPossibleMoves(startingSquareId, pieceObject, gameState.boardSquaresArray);
         let legalSquaresJson = JSON.stringify(legalSquares);
+        highlightPossibleMoves(legalSquares);
         ev.dataTransfer.setData("application/json", legalSquaresJson);
     }
+
+    ev.target.addEventListener('dragend', () => {
+        removeHighlightFromMoves();
+    }, { once: true });
+
 }
 
 export const drop = (ev) => {
+    console.log('ddd')
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
 
@@ -44,6 +52,9 @@ export const drop = (ev) => {
     const pieceType = piece.classList[1];
     const destinationSquare = ev.currentTarget;
     let destinationSquareId = destinationSquare.id;
+
+    // removeHighlightFromMoves();
+
     legalSquares = checkMoveValidAgainstCheck(legalSquares, startingSquareId,pieceColor,pieceType);
 
     console.log('legalSquares', legalSquares)
@@ -65,6 +76,13 @@ export const drop = (ev) => {
             return;
         }
         if(pieceType === 'king' && !kingHasMoved(pieceColor) && gameState.castlingSquares.includes(destinationSquareId) && isCheck) return;
+
+        if(pieceType === 'pawn' && gameState.enPassantSquare === destinationSquareId){
+            performEnPassant(piece, pieceColor, startingSquareId, destinationSquareId);
+            gameState.enPassantSquare = 'blank'
+            return;
+        }
+
         destinationSquare.appendChild(piece)
         toggleTurn()
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);

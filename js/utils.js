@@ -85,4 +85,19 @@ export const showAlert = ( message ) => {
 
 }
 
+export const highlightPossibleMoves = (legalSquares) => {
+    legalSquares.forEach(squareId => {
+        const square = document.getElementById(squareId);
+        if (square) {
+            square.classList.add('highlight');
+        }
+    });
+};
 
+
+export const removeHighlightFromMoves = () => {
+    const highlightedSquares = document.querySelectorAll('.highlight');
+    highlightedSquares.forEach(square => {
+        square.classList.remove('highlight');
+    });
+};

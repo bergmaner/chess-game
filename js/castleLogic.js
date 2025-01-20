@@ -78,12 +78,12 @@ export const performCastling = (piece, pieceColor, startingSquareId, destination
     const rook = document.getElementById(rookId);
     const rookDestinationSquare = document.getElementById(rookDestinationSquareId);
     rookDestinationSquare.appendChild(rook);
-    updateBoardSquaresArray(rook.id.slice(-2), rookDestinationSquareId, boardSquaresArray);
+    gameState.boardSquaresArray = updateBoardSquaresArray(rook.id.slice(-2), rookDestinationSquareId, boardSquaresArray);
 
     const destinationSquare = document.getElementById(destinationSquareId);
     destinationSquare.appendChild(piece);
     toggleTurn();
-    updateBoardSquaresArray(startingSquareId, destinationSquareId, boardSquaresArray);
+    gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, boardSquaresArray);
 
     const captured = false;
     makeMove(startingSquareId, destinationSquareId, 'king', pieceColor, captured);

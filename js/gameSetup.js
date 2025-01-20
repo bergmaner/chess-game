@@ -7,6 +7,7 @@ export const gameState = {
     boardSquaresArray: [],
     moves: [],
     castlingSquares: [ 'g1', 'g8', 'c1', 'c8' ],
+    enPassantSquare: 'blank'
 };
 
 export const setupPieces = () => {

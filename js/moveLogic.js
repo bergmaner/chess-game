@@ -59,3 +59,20 @@ export const getAllPossibleMoves = (squaresArray, color) => {
             return legalSquares;
         });
 };
+
+export const isEnpassantPosible = ( currentSquareId, pawnStartingSquareId, direction ) => {
+
+    if(gameState.moves.length === 0) return false;
+    let lastMove = gameState.moves[gameState.moves.length -1];
+
+    console.log('dd', gameState.moves)
+
+    if(!(lastMove.to === currentSquareId && lastMove.from === pawnStartingSquareId && lastMove.pieceType === 'pawn')) return false;
+    let file = currentSquareId[0];
+    let rank = parseInt(currentSquareId[1]);
+    rank += direction;
+    let squareBehindId = file + rank;
+    gameState.enPassantSquare = squareBehindId;
+    return true;
+
+}

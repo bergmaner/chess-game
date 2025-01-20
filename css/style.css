@@ -74,20 +74,21 @@ body {
     left: auto;
 }
 
-.highlight {
+.square.highlight {
     position: relative;
 }
 
-.highlight::after {
+.square.highlight::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 10px;
-    height: 10px;
-    background-color: green;
-    border-radius: 50%;
+    z-index: 55;
     transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #000000CC;
+    border-radius: 50%;
     pointer-events: none;
 }
 
