@@ -86,7 +86,7 @@ export const checkPawnForwardMoves = (
     currentRank += direction;
     currentSquareId = currentFile + currentRank;
     currentSquare = boardSquaresArray.find((x) => x.squareId === currentSquareId)
-    squareContent = currentSquare.pieceColor;
+    squareContent = currentSquare?.pieceColor;
     if(squareContent !== 'blank')
         return legalSquares;
     legalSquares.push(currentSquareId)

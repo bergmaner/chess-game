@@ -7,7 +7,8 @@ export const gameState = {
     boardSquaresArray: [],
     moves: [],
     castlingSquares: [ 'g1', 'g8', 'c1', 'c8' ],
-    enPassantSquare: 'blank'
+    enPassantSquare: 'blank',
+    allowMovement: true,
 };
 
 export const setupPieces = () => {
@@ -37,6 +38,10 @@ export const setupBoardSquares = (boardSquares) => {
     }
 }
 
+
+// export const addBoardListeners = (chessBoard) => {
+//     chessBoard.addEventListener("click", clearPromotionOptions);
+// };
 
 
 export const fillBoardSquaresArray = (boardSquares) => {

@@ -9,6 +9,8 @@ import { gameState} from "./gameSetup.js";
 import {getAllPossibleMoves, updateBoardSquaresArray} from "./moveLogic.js";
 import {getKingLastMove} from "./gameHistory.js";
 
+const boardSquares = document.getElementsByClassName('square');
+const chessBoard = document.getElementById('board');
 export const isKingInCheck = (squareId, pieceColor, boardSquaresArray) => {
 
     const checkRules = [
@@ -96,3 +98,45 @@ export const checkForCheckmate = () => {
     showAlert(message);
 
 }
+
+export const displayPromotionChoices = (pieceId, pieceColor, startingSquareId, destinationSquareId, captured) => {
+    const file = destinationSquareId[0];
+    const rank = parseInt(destinationSquareId[1]);
+    const direction = pieceColor === 'white' ? -1 : 1;
+
+    const squareBehindIds = Array.from({ length: 3 }, (_, i) => file + (rank + direction * (i + 1)));
+
+    const destinationSquare = document.getElementById(destinationSquareId);
+    const squareBehindElements = squareBehindIds.map(id => document.getElementById(id));
+
+    const promotionPieces = ['queen', 'knight', 'rook', 'bishop'];
+
+    const promotionElements = promotionPieces.map((pieceType, index) =>
+        createChessPiece(pieceType, pieceColor, 'promotionOption')
+    );
+
+    destinationSquare.appendChild(promotionElements[0]);
+    promotionElements.slice(1).forEach((piece, index) => {
+        squareBehindElements[index]?.appendChild(piece);
+    });
+};
+
+export const createChessPiece = ( pieceType, color, pieceClass ) => {
+
+    let pieceName = 'images/' + color.charAt(0).toUpperCase() + color.slice(1) + '-' + pieceType.charAt(0).toUpperCase() + pieceType.slice(1) + '.png';
+
+    console.log("pieceName",pieceName)
+
+    let pieceDiv = document.createElement('div');
+    pieceDiv.className = `${pieceClass} ${pieceType}`;
+    pieceDiv.setAttribute('color', color);
+    let img = document.createElement('img');
+    img.src = pieceName;
+    img.alt = pieceType;
+    pieceDiv.appendChild(img);
+    return pieceDiv;
+
+}
+
+
+

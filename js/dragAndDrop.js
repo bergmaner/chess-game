@@ -1,7 +1,7 @@
 import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
 import {getPieceAtSquare, highlightPossibleMoves, removeHighlightFromMoves} from "./utils.js";
-import {checkForCheckmate, checkMoveValidAgainstCheck, isKingInCheck} from "./gameLogic.js";
+import {checkForCheckmate, checkMoveValidAgainstCheck, displayPromotionChoices, isKingInCheck} from "./gameLogic.js";
 import {makeMove} from "./gameHistory.js";
 import {kingHasMoved, performCastling} from "./castleLogic.js";
 import {performEnPassant} from "./pieceMoves.js";
@@ -11,6 +11,9 @@ export const allowDrop = (ev) => {
 }
 
 export const drag = (ev) => {
+
+    if(!gameState.allowMovement) return;
+
     const piece = ev.target;
     const pieceColor = piece.getAttribute('color');
     const pieceType = piece.classList[1];
@@ -83,6 +86,19 @@ export const drop = (ev) => {
             return;
         }
 
+
+        console.log('nanan',destinationSquareId, destinationSquareId.charAt(1),  destinationSquareId.charAt(1) == 8, pieceType)
+
+        if(pieceType === 'pawn' && (destinationSquareId.charAt(1) === '8' || destinationSquareId.charAt(1) === '1')){
+
+            console.log('lalal')
+            gameState.allowMovement = false;
+            displayPromotionChoices(pieceId, pieceColor, startingSquareId, destinationSquareId, false );
+            // updateBoardSquaresOpacity();
+            return;
+        }
+
+
         destinationSquare.appendChild(piece)
         toggleTurn()
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
@@ -94,6 +110,15 @@ export const drop = (ev) => {
 
 
     if(squareContent.pieceColor !== 'blank' && (legalSquares.includes(destinationSquareId)) ){
+
+        if(pieceType === 'pawn' && (destinationSquareId.charAt(1) === '8' || destinationSquareId.charAt(1) === '1')){
+            console.log('nananna')
+            gameState.allowMovement = false;
+            displayPromotionChoices(pieceId, pieceColor, startingSquareId, destinationSquareId, true );
+            // updateBoardSquaresOpacity();
+            return;
+        }
+
         while(destinationSquare.firstChild){
             destinationSquare.removeChild(destinationSquare.firstChild);
         }

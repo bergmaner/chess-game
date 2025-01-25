@@ -104,3 +104,22 @@ body {
         font-size: 8px;
     }
 }
+
+.promotionOption {
+    border-radius: 10px;
+    background-color: #6f6f6f;
+    color: white;
+    transition: all 0.3s ease;
+    position: absolute;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.promotionOption:hover {
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #73c284;
+    transform:  scale(1.28);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    color: black;
+}
