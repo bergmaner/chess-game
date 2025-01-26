@@ -1,4 +1,5 @@
 import {allowDrop, drag, drop} from './dragAndDrop.js';
+import {clearPromotionOptions} from "./gameLogic.js";
 
 const pieces = document.getElementsByClassName('piece');
 const piecesImages = document.getElementsByClassName('pieceImg');
@@ -39,9 +40,9 @@ export const setupBoardSquares = (boardSquares) => {
 }
 
 
-// export const addBoardListeners = (chessBoard) => {
-//     chessBoard.addEventListener("click", clearPromotionOptions);
-// };
+export const addBoardListeners = (chessBoard) => {
+    chessBoard.addEventListener("click", clearPromotionOptions);
+};
 
 
 export const fillBoardSquaresArray = (boardSquares) => {
@@ -63,7 +64,7 @@ export const fillBoardSquaresArray = (boardSquares) => {
             color = piece.getAttribute("color");
             pieceType = piece.classList[1];
             pieceId = piece.id;
-            console.log('ddd', piece.id)
+
         }
 
 
@@ -78,5 +79,5 @@ export const fillBoardSquaresArray = (boardSquares) => {
         gameState.boardSquaresArray.push(arrayElement);
 
     }
-    console.log('ddd', gameState.boardSquaresArray)
+
 }

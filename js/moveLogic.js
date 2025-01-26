@@ -17,7 +17,7 @@ export const getPossibleMoves = (startingSquareId, piece, boardSquaresArray) => 
     return generator ? generator(startingSquareId, piece.pieceColor, boardSquaresArray) : [];
 }
 
-export const updateBoardSquaresArray = (currentSquareId, destinationSquareId, boardSquaresArray) => {
+export const updateBoardSquaresArray = (currentSquareId, destinationSquareId, boardSquaresArray, promotionOption = 'blank') => {
 
     const newBoardSquaresArray = deepCopyArray(boardSquaresArray);
 
@@ -25,14 +25,14 @@ export const updateBoardSquaresArray = (currentSquareId, destinationSquareId, bo
     const destinationElement = newBoardSquaresArray.find((x) => x.squareId === destinationSquareId);
 
     destinationElement.pieceColor = currentSquare.pieceColor;
-    destinationElement.pieceType = currentSquare.pieceType;
-    destinationElement.pieceId = currentSquare.pieceId;
+    destinationElement.pieceType = promotionOption === 'blank' ? currentSquare.pieceType : promotionOption;
+    destinationElement.pieceId = promotionOption === 'blank' ? currentSquare.pieceId : promotionOption + currentSquare.pieceId;
+
 
     currentSquare.pieceColor = 'blank';
     currentSquare.pieceType = 'blank';
     currentSquare.pieceId = 'blank';
 
-    console.log('lll',gameState.boardSquaresArray)
 
     return newBoardSquaresArray;
 
@@ -65,7 +65,6 @@ export const isEnpassantPosible = ( currentSquareId, pawnStartingSquareId, direc
     if(gameState.moves.length === 0) return false;
     let lastMove = gameState.moves[gameState.moves.length -1];
 
-    console.log('dd', gameState.moves)
 
     if(!(lastMove.to === currentSquareId && lastMove.from === pawnStartingSquareId && lastMove.pieceType === 'pawn')) return false;
     let file = currentSquareId[0];

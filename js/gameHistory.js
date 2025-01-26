@@ -1,6 +1,6 @@
 import {gameState} from "./gameSetup.js";
 
-export const makeMove = ( startingSquareId, destinationSquareId, pieceType, pieceColor, captured ) => {
+export const makeMove = ( startingSquareId, destinationSquareId, pieceType, pieceColor, captured, promotedTo = 'blank' ) => {
 
     gameState.moves.push({
         from: startingSquareId,
@@ -8,6 +8,7 @@ export const makeMove = ( startingSquareId, destinationSquareId, pieceType, piec
         pieceType: pieceType,
         pieceColor: pieceColor,
         captured: captured,
+        promotedTo: promotedTo
     });
 
 }

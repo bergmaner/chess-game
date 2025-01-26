@@ -5,9 +5,10 @@ import {
     getRookMoves
 } from "./pieceMoves.js";
 import {deepCopyArray, getPieceAtSquare, showAlert} from "./utils.js";
-import { gameState} from "./gameSetup.js";
+import {gameState, toggleTurn} from "./gameSetup.js";
 import {getAllPossibleMoves, updateBoardSquaresArray} from "./moveLogic.js";
-import {getKingLastMove} from "./gameHistory.js";
+import {getKingLastMove, makeMove} from "./gameHistory.js";
+import {drag} from "./dragAndDrop.js";
 
 const boardSquares = document.getElementsByClassName('square');
 const chessBoard = document.getElementById('board');
@@ -119,13 +120,28 @@ export const displayPromotionChoices = (pieceId, pieceColor, startingSquareId, d
     promotionElements.slice(1).forEach((piece, index) => {
         squareBehindElements[index]?.appendChild(piece);
     });
+
+    let promotionOptions = document.getElementsByClassName('promotionOption');
+
+    for (let i=0; i<promotionOptions.length ;i++ ){
+
+        let pieceType = promotionOptions[i].classList[1];
+        promotionOptions[i].addEventListener('click', () => {
+            performPromotion(pieceId, pieceType, pieceColor, startingSquareId, destinationSquareId,captured);
+
+        })
+
+    }
+
+
+
 };
 
 export const createChessPiece = ( pieceType, color, pieceClass ) => {
 
     let pieceName = 'images/' + color.charAt(0).toUpperCase() + color.slice(1) + '-' + pieceType.charAt(0).toUpperCase() + pieceType.slice(1) + '.png';
 
-    console.log("pieceName",pieceName)
+
 
     let pieceDiv = document.createElement('div');
     pieceDiv.className = `${pieceClass} ${pieceType}`;
@@ -135,6 +151,78 @@ export const createChessPiece = ( pieceType, color, pieceClass ) => {
     img.alt = pieceType;
     pieceDiv.appendChild(img);
     return pieceDiv;
+
+}
+
+export const clearPromotionOptions = () => {
+
+    for (let i=0; i<boardSquares.length; i++){
+        let style = getComputedStyle(boardSquares[i]);
+        let backgroundColor = style.backgroundColor;
+        let rgbaColor = backgroundColor.replace('0.5)','1)');
+        boardSquares[i].style.backgroundColor = rgbaColor;
+        boardSquares[i].style.opacity = 1;
+
+    }
+
+    let elementsToRemove = chessBoard.querySelectorAll('.promotionOption');
+    elementsToRemove.forEach((element) => {
+        element.parentElement.removeChild(element);
+    });
+    gameState.allowMovement = true;
+
+}
+
+export const updateBoardSquaresOpacity = () => {
+
+    for( let i=0; i<boardSquares.length; i++ ){
+        if(!(boardSquares[i].querySelector('.promotionOption'))){
+            boardSquares[i].style.opacity = 0.5;
+        }
+        else{
+
+            let style = getComputedStyle(boardSquares[i]);
+            let backgroundColor = style.backgroundColor;
+            let rgbaColor = backgroundColor.replace('rgb', 'rgba').replace(')',',0.5)');
+            boardSquares[i].style.backgroundColor = rgbaColor;
+
+        }
+
+
+    }
+
+}
+
+export const performPromotion = (pieceId, pieceType, pieceColor,startingSquareId,destinationSquareId, captured) => {
+
+    clearPromotionOptions();
+    let piece = createChessPiece(pieceType, pieceColor,'piece');
+
+    piece.addEventListener('dragstart', drag);
+    piece.setAttribute('draggable', true);
+    piece.firstChild.setAttribute('draggable',false);
+    piece.id = pieceType + pieceId;
+
+
+
+
+    const startingSquare = document.getElementById(startingSquareId);
+    while(startingSquare.firstChild){
+        startingSquare.removeChild(startingSquare.firstChild);
+    }
+
+    const destinationSquare = document.getElementById(destinationSquareId);
+
+    if(captured)
+    while(destinationSquare.firstChild){
+        destinationSquare.removeChild(destinationSquare.firstChild);
+    }
+    destinationSquare.appendChild(piece);
+    toggleTurn();
+    gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId,destinationSquareId,gameState.boardSquaresArray,pieceType);
+    makeMove(startingSquareId, destinationSquareId, pieceType, pieceColor, captured,pieceType);
+    checkForCheckmate();
+    return;
 
 }
 

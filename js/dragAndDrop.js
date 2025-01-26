@@ -1,7 +1,7 @@
 import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
 import {getPieceAtSquare, highlightPossibleMoves, removeHighlightFromMoves} from "./utils.js";
-import {checkForCheckmate, checkMoveValidAgainstCheck, displayPromotionChoices, isKingInCheck} from "./gameLogic.js";
+import {checkForCheckmate, checkMoveValidAgainstCheck, displayPromotionChoices, isKingInCheck, updateBoardSquaresOpacity} from "./gameLogic.js";
 import {makeMove} from "./gameHistory.js";
 import {kingHasMoved, performCastling} from "./castleLogic.js";
 import {performEnPassant} from "./pieceMoves.js";
@@ -29,6 +29,9 @@ export const drag = (ev) => {
 
         let legalSquares = getPossibleMoves(startingSquareId, pieceObject, gameState.boardSquaresArray);
         let legalSquaresJson = JSON.stringify(legalSquares);
+
+        console.log('legalSquares', legalSquares)
+
         highlightPossibleMoves(legalSquares);
         ev.dataTransfer.setData("application/json", legalSquaresJson);
     }
@@ -40,7 +43,7 @@ export const drag = (ev) => {
 }
 
 export const drop = (ev) => {
-    console.log('ddd')
+
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
 
@@ -60,7 +63,6 @@ export const drop = (ev) => {
 
     legalSquares = checkMoveValidAgainstCheck(legalSquares, startingSquareId,pieceColor,pieceType);
 
-    console.log('legalSquares', legalSquares)
 
     if(pieceType === 'king'){
         let isCheck = isKingInCheck(destinationSquareId, pieceColor, gameState.boardSquaresArray);
@@ -87,14 +89,13 @@ export const drop = (ev) => {
         }
 
 
-        console.log('nanan',destinationSquareId, destinationSquareId.charAt(1),  destinationSquareId.charAt(1) == 8, pieceType)
 
         if(pieceType === 'pawn' && (destinationSquareId.charAt(1) === '8' || destinationSquareId.charAt(1) === '1')){
 
-            console.log('lalal')
+
             gameState.allowMovement = false;
             displayPromotionChoices(pieceId, pieceColor, startingSquareId, destinationSquareId, false );
-            // updateBoardSquaresOpacity();
+            updateBoardSquaresOpacity();
             return;
         }
 
@@ -112,10 +113,10 @@ export const drop = (ev) => {
     if(squareContent.pieceColor !== 'blank' && (legalSquares.includes(destinationSquareId)) ){
 
         if(pieceType === 'pawn' && (destinationSquareId.charAt(1) === '8' || destinationSquareId.charAt(1) === '1')){
-            console.log('nananna')
+
             gameState.allowMovement = false;
             displayPromotionChoices(pieceId, pieceColor, startingSquareId, destinationSquareId, true );
-            // updateBoardSquaresOpacity();
+            updateBoardSquaresOpacity();
             return;
         }
 
