@@ -90,10 +90,9 @@ export const drop = (ev) => {
 
         if(pieceType === 'pawn' && gameState.enPassantSquare === destinationSquareId){
             performEnPassant(piece, pieceColor, startingSquareId, destinationSquareId);
-            gameState.enPassantSquare = 'blank'
             return;
         }
-
+        gameState.enPassantSquare = 'blank'
 
 
         if(pieceType === 'pawn' && (destinationSquareId.charAt(1) === '8' || destinationSquareId.charAt(1) === '1')){

@@ -1,3 +1,5 @@
+import {gameState} from "./gameSetup.js";
+import {calculateCastlingRights} from "./castleLogic.js";
 
 export const getMovesInDirections = (startingSquareId, pieceColor, boardSquaresArray, directions) => {
     const file = startingSquareId.charAt(0);
@@ -100,4 +102,61 @@ export const removeHighlightFromMoves = () => {
     highlightedSquares.forEach(square => {
         square.classList.remove('highlight');
     });
+};
+
+
+export const PIECE_MAP = {
+    pawn: 'p',
+    bishop: 'b',
+    knight: 'n',
+    rook: 'r',
+    king: 'k',
+    queen: 'q',
+};
+
+export const getPieceNotation = (square) => {
+    const piece = PIECE_MAP[square.pieceType] || '';
+    return square.pieceColor === 'white' ? piece.toUpperCase() : piece;
+};
+
+export const compressEmptySquares = (fen) => {
+    return fen.replace(/(blank)+/g, (match) => match.length / 5); // Każde "blank" to 5 znaków
+};
+
+export const generateRankFEN = (boardSquares, rank) => {
+    return [...'abcdefgh']
+        .map((file) => {
+            const square = boardSquares.find((x) => x.squareId === `${file}${rank}`);
+            return square ? getPieceNotation(square) || 'blank' : 'blank';
+        })
+        .join('');
+};
+
+
+export const calculateMoveCount = (moves) => Math.floor(moves.length / 2) + 1;
+
+export const getFiftyMovesRuleCount = (moves) => {
+    let count = 0;
+    for (const move of moves) {
+        count++;
+        if (move.captured || move.pieceType === 'pawn' || move.promotedTo !== 'blank') {
+            count = 0;
+        }
+    }
+    return count;
+};
+
+export const generateFEN = (boardSquares) => {
+    const generateBoardFEN = () => {
+        return Array.from({ length: 8 }, (_, i) => generateRankFEN(boardSquares, 8 - i)).join('/');
+    };
+
+    const boardFEN = compressEmptySquares(generateBoardFEN());
+    const turnFEN = gameState.isWhiteTurn ? 'w' : 'b';
+    const castlingFEN = calculateCastlingRights();
+    const enPassantFEN = gameState.enPassantSquare === 'blank' ? '-' : gameState.enPassantSquare;
+    const fiftyMovesCount = getFiftyMovesRuleCount(gameState.moves);
+    const moveCount = calculateMoveCount(gameState.moves);
+
+    return `${boardFEN} ${turnFEN} ${castlingFEN} ${enPassantFEN} ${fiftyMovesCount} ${moveCount}`;
 };

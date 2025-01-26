@@ -91,3 +91,18 @@ export const performCastling = (piece, pieceColor, startingSquareId, destination
     checkForEndGame();
     return;
 };
+
+export const calculateCastlingRights = () => {
+    const castlingRights = [
+        { color: 'white', rookSquare: 'h1', notation: 'K' },
+        { color: 'white', rookSquare: 'a1', notation: 'Q' },
+        { color: 'black', rookSquare: 'h8', notation: 'k' },
+        { color: 'black', rookSquare: 'a8', notation: 'q' },
+    ];
+
+    return castlingRights
+        .filter(({ color, rookSquare }) => !kingHasMoved(color) && !rookHasMoved(color, rookSquare))
+        .map(({ notation }) => notation)
+        .join('') || '-';
+};
+

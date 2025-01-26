@@ -149,6 +149,7 @@ export const performEnPassant = ( piece, pieceColor, startingSquareId, destinati
     gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
     let captured = true;
     makeMove(startingSquareId,destinationSquareId,'pawn',pieceColor,captured);
+    gameState.enPassantSquare = 'blank';
     checkForEndGame();
     return;
 

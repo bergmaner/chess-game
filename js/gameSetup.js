@@ -6,6 +6,7 @@ const piecesImages = document.getElementsByClassName('pieceImg');
 export const gameState = {
     isWhiteTurn: true,
     boardSquaresArray: [],
+    positionArray: [],
     moves: [],
     castlingSquares: [ 'g1', 'g8', 'c1', 'c8' ],
     enPassantSquare: 'blank',

@@ -4,7 +4,7 @@ import {
     getKnightMoves,
     getRookMoves
 } from "./pieceMoves.js";
-import {deepCopyArray, getPieceAtSquare, showAlert} from "./utils.js";
+import {deepCopyArray, generateFEN, getPieceAtSquare, showAlert} from "./utils.js";
 import {gameState, toggleTurn} from "./gameSetup.js";
 import {getAllPossibleMoves, updateBoardSquaresArray} from "./moveLogic.js";
 import {getKingLastMove, makeMove} from "./gameHistory.js";
@@ -87,6 +87,9 @@ const isMoveValidAgainstCheck = (startingSquareId, destinationId, pieceColor, pi
 export const checkForEndGame = () => {
 
     checkForCheckmateAndStalemate();
+    let currentPosition = generateFEN(gameState.boardSquaresArray);
+    console.log('dd', currentPosition)
+    gameState.positionArray.push(currentPosition);
 
 }
 
@@ -199,6 +202,8 @@ export const updateBoardSquaresOpacity = () => {
 
 }
 
+
+
 export const performPromotion = (pieceId, pieceType, pieceColor,startingSquareId,destinationSquareId, captured) => {
 
     clearPromotionOptions();
@@ -231,6 +236,19 @@ export const performPromotion = (pieceId, pieceType, pieceColor,startingSquareId
     return;
 
 }
+
+export const getFiftyMovesRuleCount = () => {
+    let count = 0;
+
+    for (let i = 0; i < gameState.moves.length; i++) {
+        if (gameState.moves[i].captured || gameState.moves[i].pieceType === "pawn" || gameState.moves[i].promotedTo !== "blank")count = 0;
+        else count++;
+
+    }
+
+    return count;
+};
+
 
 
 
