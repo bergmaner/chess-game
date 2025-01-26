@@ -28,6 +28,8 @@ export const toggleTurn = () => {
     gameState.isWhiteTurn = !gameState.isWhiteTurn;
 }
 
+
+
 export const setupBoardSquares = (boardSquares) => {
     for (let i = 0; i < boardSquares.length; i++) {
         boardSquares[i].addEventListener('dragover', allowDrop);

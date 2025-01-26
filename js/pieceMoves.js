@@ -3,7 +3,7 @@ import {getCastlingMovesForKing} from "./castleLogic.js";
 import {isEnpassantPosible, updateBoardSquaresArray} from "./moveLogic.js";
 import {gameState, toggleTurn} from "./gameSetup.js";
 import {makeMove} from "./gameHistory.js";
-import {checkForCheckmate} from "./gameLogic.js";
+import {checkForEndGame} from "./gameLogic.js";
 
 export const getPawnMoves = (startingSquareId, pieceColor, boardSquaresArray) => {
     return [
@@ -149,7 +149,7 @@ export const performEnPassant = ( piece, pieceColor, startingSquareId, destinati
     gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
     let captured = true;
     makeMove(startingSquareId,destinationSquareId,'pawn',pieceColor,captured);
-    checkForCheckmate();
+    checkForEndGame();
     return;
 
 }

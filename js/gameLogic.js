@@ -84,18 +84,24 @@ const isMoveValidAgainstCheck = (startingSquareId, destinationId, pieceColor, pi
     return !isKingInCheck(kingSquare, pieceColor, updatedBoard);
 };
 
-export const checkForCheckmate = () => {
+export const checkForEndGame = () => {
+
+    checkForCheckmateAndStalemate();
+
+}
+
+export const checkForCheckmateAndStalemate = () => {
 
     let kingSquare = gameState.isWhiteTurn ? getKingLastMove('white') : getKingLastMove('black');
     let pieceColor = gameState.isWhiteTurn ? 'white' : 'black';
     let boardSquaresArrayCopy = deepCopyArray(gameState.boardSquaresArray)
     let kingIsCheck = isKingInCheck(kingSquare, pieceColor, boardSquaresArrayCopy);
-    if(!kingIsCheck) return;
     let possibleMoves = getAllPossibleMoves(boardSquaresArrayCopy, pieceColor);
     if(possibleMoves.length > 0) return;
 
     let message = '';
-    gameState.isWhiteTurn ? (message = 'Black Wins') : (message = 'White Wins' );
+    if(kingIsCheck) gameState.isWhiteTurn ? (message = 'Black Wins') : (message = 'White Wins' );
+    else message = 'Draw';
     showAlert(message);
 
 }
@@ -221,7 +227,7 @@ export const performPromotion = (pieceId, pieceType, pieceColor,startingSquareId
     toggleTurn();
     gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId,destinationSquareId,gameState.boardSquaresArray,pieceType);
     makeMove(startingSquareId, destinationSquareId, pieceType, pieceColor, captured,pieceType);
-    checkForCheckmate();
+    checkForEndGame();
     return;
 
 }

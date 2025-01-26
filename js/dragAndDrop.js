@@ -1,7 +1,13 @@
 import {gameState, toggleTurn} from './gameSetup.js';
 import { getPossibleMoves, updateBoardSquaresArray } from './moveLogic.js';
 import {getPieceAtSquare, highlightPossibleMoves, removeHighlightFromMoves} from "./utils.js";
-import {checkForCheckmate, checkMoveValidAgainstCheck, displayPromotionChoices, isKingInCheck, updateBoardSquaresOpacity} from "./gameLogic.js";
+import {
+    checkForEndGame,
+    checkMoveValidAgainstCheck,
+    displayPromotionChoices,
+    isKingInCheck,
+    updateBoardSquaresOpacity
+} from "./gameLogic.js";
 import {makeMove} from "./gameHistory.js";
 import {kingHasMoved, performCastling} from "./castleLogic.js";
 import {performEnPassant} from "./pieceMoves.js";
@@ -105,7 +111,7 @@ export const drop = (ev) => {
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
         let captured = false;
         makeMove( startingSquareId, destinationSquareId, pieceType, pieceColor, captured );
-        checkForCheckmate();
+        checkForEndGame();
         return;
     }
 
@@ -129,7 +135,7 @@ export const drop = (ev) => {
         gameState.boardSquaresArray = updateBoardSquaresArray(startingSquareId, destinationSquareId, gameState.boardSquaresArray);
         let captured = true;
         makeMove( startingSquareId, destinationSquareId, pieceType, pieceColor, captured );
-        checkForCheckmate();
+        checkForEndGame();
         return;
 
     }

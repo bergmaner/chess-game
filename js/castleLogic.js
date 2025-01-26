@@ -1,5 +1,5 @@
 import {gameState, toggleTurn} from "./gameSetup.js";
-import {checkForCheckmate, isKingInCheck} from "./gameLogic.js";
+import {checkForEndGame, isKingInCheck} from "./gameLogic.js";
 import {updateBoardSquaresArray} from "./moveLogic.js";
 import {makeMove} from "./gameHistory.js";
 
@@ -88,6 +88,6 @@ export const performCastling = (piece, pieceColor, startingSquareId, destination
     const captured = false;
     makeMove(startingSquareId, destinationSquareId, 'king', pieceColor, captured);
 
-    checkForCheckmate();
+    checkForEndGame();
     return;
 };
