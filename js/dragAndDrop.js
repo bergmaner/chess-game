@@ -29,7 +29,7 @@ export const drag = (ev) => {
 
         let legalSquares = getPossibleMoves(startingSquareId, pieceObject, gameState.boardSquaresArray);
         let legalSquaresJson = JSON.stringify(legalSquares);
-
+        legalSquares = checkMoveValidAgainstCheck(legalSquares, startingSquareId, pieceColor, pieceType);
         console.log('legalSquares', legalSquares)
 
         highlightPossibleMoves(legalSquares);
