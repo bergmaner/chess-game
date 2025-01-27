@@ -160,3 +160,5 @@ export const generateFEN = (boardSquares) => {
 
     return `${boardFEN} ${turnFEN} ${castlingFEN} ${enPassantFEN} ${fiftyMovesCount} ${moveCount}`;
 };
+
+

@@ -11,6 +11,7 @@ export const gameState = {
     castlingSquares: [ 'g1', 'g8', 'c1', 'c8' ],
     enPassantSquare: 'blank',
     allowMovement: true,
+    activeArrows: new Map(),
 };
 
 export const setupPieces = () => {

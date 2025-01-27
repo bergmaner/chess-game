@@ -13,6 +13,21 @@ body {
     flex-wrap: wrap;
 }
 
+.arrows {
+    position: absolute;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.arrow {
+    pointer-events: none; /* Wyłącza interakcje z pojedynczą strzałką */
+}
+.arrow-head {
+    cursor: pointer;
+
+}
+
+
 .square{
     width: 12.5%;
     height: 12.5%;
