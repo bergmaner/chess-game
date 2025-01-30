@@ -88,8 +88,13 @@ export const checkForEndGame = () => {
 
     checkForCheckmateAndStalemate();
     let currentPosition = generateFEN(gameState.boardSquaresArray);
-    console.log('dd', currentPosition)
     gameState.positionArray.push(currentPosition);
+    let threeFoldRepetition = isThreefoldRepetition();
+    let isDraw = threeFoldRepetition;
+    if(isDraw){
+        gameState.allowMovement = false;
+        showAlert('Draw');
+    }
 
 }
 
@@ -203,6 +208,15 @@ export const updateBoardSquaresOpacity = () => {
 }
 
 
+export const isThreefoldRepetition = () => {
+
+    return gameState.positionArray.some((string) => {
+        const fen = string.split(' ').slice(0,4).join(' ');
+        return gameState.positionArray.filter((x) => x.split(' ').slice(0,4).join(' ') === fen).length >= 3
+    });
+
+}
+
 
 export const performPromotion = (pieceId, pieceType, pieceColor,startingSquareId,destinationSquareId, captured) => {
 
@@ -236,19 +250,5 @@ export const performPromotion = (pieceId, pieceType, pieceColor,startingSquareId
     return;
 
 }
-
-export const getFiftyMovesRuleCount = () => {
-    let count = 0;
-
-    for (let i = 0; i < gameState.moves.length; i++) {
-        if (gameState.moves[i].captured || gameState.moves[i].pieceType === "pawn" || gameState.moves[i].promotedTo !== "blank")count = 0;
-        else count++;
-
-    }
-
-    return count;
-};
-
-
 
 
