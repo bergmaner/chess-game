@@ -34,7 +34,7 @@ export const checkPawnDiagonalCaptures = (startingSquareId, pieceColor, boardSqu
 
 
 
-            const squareContent = currentSquare.pieceColor;
+            const squareContent = currentSquare?.pieceColor;
             if(squareContent !== 'blank' && squareContent !== pieceColor)
                 legalSquares.push(currentSquareId)
 

@@ -12,6 +12,9 @@ import {drag} from "./dragAndDrop.js";
 
 const boardSquares = document.getElementsByClassName('square');
 const chessBoard = document.getElementById('board');
+
+
+
 export const isKingInCheck = (squareId, pieceColor, boardSquaresArray) => {
 
     const checkRules = [
@@ -46,7 +49,7 @@ export const isKingInCheck = (squareId, pieceColor, boardSquaresArray) => {
             const pieceProperties = getPieceAtSquare(squareId, boardSquaresArray);
 
 
-            if (rule.types.includes(pieceProperties.pieceType) && pieceColor !== pieceProperties.pieceColor) {
+            if (rule.types.includes(pieceProperties?.pieceType) && pieceColor !== pieceProperties?.pieceColor) {
                 return true;
             }
         }
@@ -90,7 +93,9 @@ export const checkForEndGame = () => {
     let currentPosition = generateFEN(gameState.boardSquaresArray);
     gameState.positionArray.push(currentPosition);
     let threeFoldRepetition = isThreefoldRepetition();
-    let isDraw = threeFoldRepetition;
+    let insufficientMaterial = hasInsufficientMaterial(currentPosition);
+    let isDraw = threeFoldRepetition || insufficientMaterial ;
+    console.log('fff', gameState.boardSquaresArray)
     if(isDraw){
         gameState.allowMovement = false;
         showAlert('Draw');
@@ -167,6 +172,63 @@ export const createChessPiece = ( pieceType, color, pieceClass ) => {
     return pieceDiv;
 
 }
+
+export const hasInsufficientMaterial = (fen) => {
+    const piecePlacement = fen.split(' ')[0];
+    const countPieces = (piece) => [...piecePlacement].filter(x => x === piece).length;
+
+    const pieceCounts = {
+        B: countPieces('B'), b: countPieces('b'),
+        N: countPieces('N'), n: countPieces('n'),
+        Q: countPieces('Q'), q: countPieces('q'),
+        R: countPieces('R'), r: countPieces('r'),
+        P: countPieces('P'), p: countPieces('p')
+    };
+
+    // If there are pawns, queens, or rooks, it's not insufficient material
+    if (pieceCounts.Q + pieceCounts.q + pieceCounts.R + pieceCounts.r + pieceCounts.P + pieceCounts.p > 0) {
+        return false;
+    }
+
+    // Check for specific cases of insufficient material
+    // King vs King only
+    if (pieceCounts.N === 0 && pieceCounts.n === 0 && pieceCounts.B === 0 && pieceCounts.b === 0) {
+        return true;
+    }
+
+    // King and one knight vs King and one knight
+    if (pieceCounts.N === 1 && pieceCounts.n === 1 && pieceCounts.B === 0 && pieceCounts.b === 0) {
+        return true;
+    }
+
+    // More than one knight on either side, or any combination of knights and bishops
+    if ((pieceCounts.N > 1 || pieceCounts.n > 1) || (pieceCounts.B + pieceCounts.b > 0 && pieceCounts.N + pieceCounts.n > 0)) {
+        return false;
+    }
+
+    // More than one bishop on either side
+    if (pieceCounts.B > 1 || pieceCounts.b > 1) {
+        return false;
+    }
+
+    // Opposite-colored bishops do not count as insufficient material
+    if (pieceCounts.B === 1 && pieceCounts.b === 1) {
+        const whiteBishop = gameState.boardSquaresArray.find(({ pieceType, pieceColor }) => pieceType === "bishop" && pieceColor === "white");
+        const blackBishop = gameState.boardSquaresArray.find(({ pieceType, pieceColor }) => pieceType === "bishop" && pieceColor === "black");
+
+        if (whiteBishop && blackBishop) {
+            if (getSquareColor(whiteBishop.squareId) !== getSquareColor(blackBishop.squareId)) {
+                return false;
+            }
+        }
+    }
+
+    return false; // Default to not insufficient material
+};
+
+
+export const getSquareColor = (squareId) =>
+    document.getElementById(squareId)?.classList.contains("white") ? "white" : "black";
 
 export const clearPromotionOptions = () => {
 
