@@ -11,12 +11,17 @@ import {
 import {makeMove} from "./gameHistory.js";
 import {kingHasMoved, performCastling} from "./castleLogic.js";
 import {performEnPassant} from "./pieceMoves.js";
+import {clearArrows} from "./arrows.js";
 
 export const allowDrop = (ev) => {
     ev.preventDefault();
 }
 
 export const drag = (ev) => {
+
+
+    const svgContainer = document.getElementById('arrow-container');
+    clearArrows(svgContainer);
 
     if(!gameState.allowMovement) return;
 

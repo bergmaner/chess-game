@@ -94,7 +94,9 @@ export const checkForEndGame = () => {
     gameState.positionArray.push(currentPosition);
     let threeFoldRepetition = isThreefoldRepetition();
     let insufficientMaterial = hasInsufficientMaterial(currentPosition);
-    let isDraw = threeFoldRepetition || insufficientMaterial ;
+    let fiftyMovesRuleCount = currentPosition.split('')[4];
+    let fiftyMovesRule = fiftyMovesRuleCount === 100;
+    let isDraw = threeFoldRepetition || insufficientMaterial || fiftyMovesRule ;
     console.log('fff', gameState.boardSquaresArray)
     if(isDraw){
         gameState.allowMovement = false;

@@ -36,13 +36,24 @@ export const drawArrow = (startSquare, endSquare, arrowId, svgContainer) => {
     const startRect = startSquare.getBoundingClientRect();
     const endRect = endSquare.getBoundingClientRect();
 
-    const startX = startRect.left + startRect.width / 2;
-    const startY = startRect.top + startRect.height / 2;
-    const endX = endRect.left + endRect.width / 2;
-    const endY = endRect.top + endRect.height / 2;
+    const squareSize = startRect.width;
+    const paddingStart = squareSize / 4;
+    const paddingEnd = squareSize / 4;
 
-    const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI); // Kąt w stopniach
-    const headLength = 15;
+    const centerXStart = startRect.left + startRect.width / 2;
+    const centerYStart = startRect.top + startRect.height / 2;
+    const centerXEnd = endRect.left + endRect.width / 2;
+    const centerYEnd = endRect.top + endRect.height / 2;
+
+    const angle = Math.atan2(centerYEnd - centerYStart, centerXEnd - centerXStart);
+
+
+    const startX = centerXStart + Math.cos(angle) * paddingStart;
+    const startY = centerYStart + Math.sin(angle) * paddingStart;
+
+    const adjustedEndX = centerXEnd - Math.cos(angle) * paddingEnd;
+    const adjustedEndY = centerYEnd - Math.sin(angle) * paddingEnd;
+
     if (!svgContainer.querySelector("svg")) {
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("class", "arrows");
@@ -57,8 +68,9 @@ export const drawArrow = (startSquare, endSquare, arrowId, svgContainer) => {
 
     const svg = svgContainer.querySelector("svg");
 
+
     if (gameState.activeArrows.has(arrowId)) {
-        removeArrow(arrowId,svgContainer);
+        removeArrow(arrowId, svgContainer);
         return;
     }
 
@@ -66,10 +78,6 @@ export const drawArrow = (startSquare, endSquare, arrowId, svgContainer) => {
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute("x1", startX);
     line.setAttribute("y1", startY);
-
-
-    const adjustedEndX = endX - (headLength * Math.cos(angle * (Math.PI / 180)));
-    const adjustedEndY = endY - (headLength * Math.sin(angle * (Math.PI / 180)));
     line.setAttribute("x2", adjustedEndX);
     line.setAttribute("y2", adjustedEndY);
 
@@ -80,20 +88,23 @@ export const drawArrow = (startSquare, endSquare, arrowId, svgContainer) => {
 
 
     const arrowHead = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    arrowHead.setAttribute("points", `0,0 -15,-8 -15,8`);
+    arrowHead.setAttribute("points", `0,0 -19,-8 -19,8`)
     arrowHead.setAttribute(
         "style",
         "fill: rgba(255, 170, 0, 0.8); pointer-events: none;"
     );
-    arrowHead.setAttribute("transform", `translate(${endX}, ${endY}) rotate(${angle})`);
+    arrowHead.setAttribute(
+        "transform",
+        `translate(${centerXEnd}, ${centerYEnd}) rotate(${(angle * 180) / Math.PI})`
+    );
 
 
     svg.appendChild(line);
     svg.appendChild(arrowHead);
 
-
     gameState.activeArrows.set(arrowId, { line, arrowHead });
 };
+
 
 export const removeArrow = (arrowId, svgContainer) => {
     const svg = svgContainer.querySelector("svg");
