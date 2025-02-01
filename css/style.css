@@ -2,16 +2,227 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh
+    height: 100vh;
+    background-color: #2c2c2c;
+    margin: 0!important;
+}
+
+
+#container{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#game-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Lewa kolumna, szachownica, prawa kolumna */
+    grid-template-rows: auto; /* Dostosowanie do zawartości */
+    height: 100vh;
+    gap: 20px;
+    width: 100%;
+    background-color: #2c2c2c;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+
+}
+
+/* Szachownica */
+#board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top:0;
+    background-color: #f0d9b5;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
 #board {
-    width: 80vw;
-    height: 80vw;
-    margin: 0 auto;
+    width: 500px; /* Dopasuj wielkość */
+    height: 500px;
     display: flex;
     flex-wrap: wrap;
+    border: 3px solid #d4af37;
 }
+
+.player-info-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+/* Informacje o graczach */
+.player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #d4af37;
+    overflow: hidden;
+}
+
+.details .name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Analiza gry */
+#analysis-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+}
+
+.analysis-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.analysis-content {
+    background-color: #555;
+    width: 100%;
+    height: calc(100% - 40px); /* Zostaw miejsce na nagłówek */
+    border-radius: 8px;
+    overflow-y: auto;
+    padding: 10px;
+    color: #ddd;
+}
+.popup {
+    position: absolute;
+    display:none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Upewnij się, że popup jest nad wszystkimi innymi elementami */
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.player-container.winner {
+    border-color: #4CAF50; /* Zielona ramka dla zwycięzcy */
+    box-shadow: 0 4px 8px rgba(0, 128, 0, 0.4); /* Zielony cień */
+    transform: scale(1.1); /* Lekkie powiększenie */
+    background-color: rgba(76, 175, 80, 0.1); /* Delikatne zielone tło */
+}
+
+
+.player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 120px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.player-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Odstęp między przyciskami */
+    margin-top: 20px;
+}
+
+.actions button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    flex: 1; /* Każdy przycisk zajmuje równą ilość dostępnej przestrzeni */
+    max-width: 150px; /* Maksymalna szerokość */
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.actions button:not(:last-child) {
+    margin-right: 10px; /* Odstęp między guzikami */
+}
+
+.actions button:hover {
+    background-color: #45a049; /* Ciemniejszy odcień zieleni przy najechaniu */
+    transform: scale(1.05); /* Powiększenie przycisku */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Lekki cień */
+}
+
+.actions button:active {
+    background-color: #3e8e41; /* Jeszcze ciemniejszy odcień zieleni po kliknięciu */
+    transform: scale(0.98); /* Efekt wciśnięcia */
+    box-shadow: none;
+}
+
 
 .arrows {
     position: absolute;
@@ -52,7 +263,9 @@ body {
 
 .piece{
 
-    width: 100%;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
     z-index: 1;
     cursor: pointer;
 
@@ -92,6 +305,23 @@ body {
 .square.highlight {
     position: relative;
 }
+.square.circle {
+    position: relative;
+}
+
+.square.circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Dopasowanie do szerokości pola */
+    height: 80%;
+    border: 6px solid  #00000099;;
+    border-radius: 50%; /* Okrąg */
+    z-index: 2;
+    pointer-events: none; /* Wyłączenie interakcji */
+}
 
 .square.highlight::after {
     content: '';
@@ -100,17 +330,17 @@ body {
     left: 50%;
     z-index: 55;
     transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    background-color: #000000CC;
+    width: 40px;
+    height: 40px;
+    background-color: #00000099;;
     border-radius: 50%;
     pointer-events: none;
 }
 
 @media (min-width: 1000px){
     #board{
-        width: 600px;
-        height: 600px;
+        width: 75vh;
+        height: 75vh;
     }
 }
 

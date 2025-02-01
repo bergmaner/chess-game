@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fillBoardSquaresArray(boardSquares);
 });
 
+
 chessBoard.addEventListener('click', () => {
     clearArrows(svgContainer);
 });

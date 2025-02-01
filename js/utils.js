@@ -77,13 +77,14 @@ export const deepCopyArray = (array) => {
 
 export const showAlert = ( message ) => {
 
-    const alert = document.getElementById('alert');
-    alert.innerHTML = message;
+    const alert = document.querySelector('.popup');
+    const header = document.querySelector('.header');
+    header.innerHTML = message;
     alert.style.display = 'block';
 
-    setTimeout(() => {
-        alert.style.display = 'none';
-    }, 3000);
+    // setTimeout(() => {
+    //     alert.style.display = 'none';
+    // }, 3000);
 
 }
 
@@ -91,16 +92,24 @@ export const highlightPossibleMoves = (legalSquares) => {
     legalSquares.forEach(squareId => {
         const square = document.getElementById(squareId);
         if (square) {
-            square.classList.add('highlight');
+            square.classList.remove('highlight', 'circle');
+            if(square.querySelector('.piece')){
+                console.log('lalal', square.childNodes)
+                square.classList.add('circle');
+            }
+                else square.classList.add('highlight');
+
+
         }
     });
 };
 
 
 export const removeHighlightFromMoves = () => {
-    const highlightedSquares = document.querySelectorAll('.highlight');
+    const highlightedSquares = document.querySelectorAll('.highlight, .circle');
     highlightedSquares.forEach(square => {
-        square.classList.remove('highlight');
+
+        square.classList.remove('highlight', 'circle');
     });
 };
 

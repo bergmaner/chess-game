@@ -88,7 +88,7 @@ export const drawArrow = (startSquare, endSquare, arrowId, svgContainer) => {
 
 
     const arrowHead = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    arrowHead.setAttribute("points", `0,0 -19,-8 -19,8`)
+    arrowHead.setAttribute("points", `0,0 -30,-12 -30,12`)
     arrowHead.setAttribute(
         "style",
         "fill: rgba(255, 170, 0, 0.8); pointer-events: none;"
