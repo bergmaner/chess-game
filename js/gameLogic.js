@@ -9,6 +9,7 @@ import {gameState, toggleTurn} from "./gameSetup.js";
 import {getAllPossibleMoves, updateBoardSquaresArray} from "./moveLogic.js";
 import {getKingLastMove, makeMove} from "./gameHistory.js";
 import {drag} from "./dragAndDrop.js";
+import {displayEvaluation, getEvaluation} from "./gameAnalysis.js";
 
 const boardSquares = document.getElementsByClassName('square');
 const chessBoard = document.getElementById('board');
@@ -88,9 +89,10 @@ const isMoveValidAgainstCheck = (startingSquareId, destinationId, pieceColor, pi
 };
 
 export const checkForEndGame = () => {
-
     checkForCheckmateAndStalemate();
+
     let currentPosition = generateFEN(gameState.boardSquaresArray);
+    getEvaluation(currentPosition,(evaluations) => displayEvaluation(evaluations))
     gameState.positionArray.push(currentPosition);
     let threeFoldRepetition = isThreefoldRepetition();
     let insufficientMaterial = hasInsufficientMaterial(currentPosition);
@@ -117,6 +119,8 @@ export const checkForCheckmateAndStalemate = () => {
     let message = '';
     if(kingIsCheck) gameState.isWhiteTurn ? (message = 'Black Wins') : (message = 'White Wins' );
     else message = 'Draw';
+
+
     showAlert(message);
 
 }

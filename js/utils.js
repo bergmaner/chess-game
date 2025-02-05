@@ -79,6 +79,9 @@ export const showAlert = ( message ) => {
 
     const alert = document.querySelector('.popup');
     const header = document.querySelector('.header');
+
+    console.log('alalala', header)
+
     header.innerHTML = message;
     alert.style.display = 'block';
 

@@ -2,6 +2,8 @@
 <html lang="en" translate="no">
   <head>
     <link rel="stylesheet" href="css/style.css" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline'; worker-src 'self'">
+
     <title>Chess game</title>
   </head>
   <body>
@@ -241,15 +243,20 @@
           <img class="pieceImg" src="images/White-Rook.png" alt="Rook">
         </div>
       </div>
-    </div>
+    </div></div>
+      <div id="evaluationBar">
+          <div class="blackBar"  ></div>
+          <div class="zero"></div>
+          <div class="evalNum">0</div>
       </div>
-<!--      <div id="analysis-container">-->
-<!--          <div class="analysis-header">Game Analysis</div>-->
-<!--          <div class="analysis-content">-->
-<!--              &lt;!&ndash; Analiza gry &ndash;&gt;-->
-<!--              <p>Select moves to analyze the game.</p>-->
-<!--          </div>-->
-<!--      </div>-->
+
+     <div id="analysis-container">
+         <div class="analysis-header">Game Analysis</div>
+         <div class="analysis-content">
+         Analiza gry
+           <p>Select moves to analyze the game.</p>
+          </div>
+    </div> 
   </div>
 
 
@@ -285,6 +292,7 @@
   </div>>
 
     <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/gameAnalysis.js"></script>
   <script>
       document.querySelector('.close-btn').addEventListener('click', () => {
           document.querySelector('.popup').style.display = 'none';

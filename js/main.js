@@ -1,5 +1,7 @@
-import { setupBoardSquares, fillBoardSquaresArray, setupPieces, addBoardListeners } from './gameSetup.js';
+import {setupBoardSquares, fillBoardSquaresArray, setupPieces, addBoardListeners, gameState} from './gameSetup.js';
 import { clearArrows, initArrows } from './arrows.js';
+import {generateFEN} from "./utils.js";
+import {displayEvaluation, getEvaluation} from "./gameAnalysis.js";
 
 // Cache DOM elements
 const chessBoard = document.getElementById('board');
@@ -16,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupBoardSquares(boardSquares);
     setupPieces();
     fillBoardSquaresArray(boardSquares);
+    let startingPosition = generateFEN(gameState.boardSquaresArray);
+    // getEvaluation(startingPosition,(evaluations) => displayEvaluation(evaluations))
 });
 
 
